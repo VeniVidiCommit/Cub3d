@@ -4,30 +4,39 @@ static void		ft_draw_wall_text(int width, int draw_start, int draw_end, int side
 {
 	double wall_x;
 
-	if (side == 0)
+	if (side <= 1)
 		wall_x = mlx->player.pos_y + mlx->vec.perp_wall_dist * mlx->vec.ray_dir_y;
 	else
 		wall_x = mlx->player.pos_x + mlx->vec.perp_wall_dist * mlx->vec.ray_dir_x;
 	wall_x -= floor(wall_x);
-	int text_x = (int)(wall_x * (double)mlx->text.texture[2]->width);
-	if (side == 0 && mlx->vec.ray_dir_x > 0)
-		text_x = mlx->text.texture[2]->width - text_x - 1;
-	if (side == 1 && mlx->vec.ray_dir_y < 0)
-		text_x = mlx->text.texture[2]->width - text_x - 1;
-	double step = 1.0 * mlx->text.texture[2]->height / mlx->vec.line_height;
+	t_img *g_texture;
+	if (side == 0)
+		g_texture = mlx->text.texture[0];
+	if (side == 1)
+		g_texture = mlx->text.texture[1];
+	if (side == 2)
+		g_texture = mlx->text.texture[2];
+	if (side == 3)
+		g_texture = mlx->text.texture[3];
+	int text_x = (int)(wall_x * (double)g_texture->width);
+	if (side <= 1 && mlx->vec.ray_dir_x > 0)
+		text_x = g_texture->width - text_x - 1;
+	if (side >= 2 && mlx->vec.ray_dir_y < 0)
+		text_x = g_texture->width - text_x - 1;
+	double step = 1.0 * g_texture->height / mlx->vec.line_height;
 	double text_pos = (draw_start - WIN_HEIGHT / 2 + mlx->vec.line_height / 2) * step;
 	for (int y = draw_start; y < draw_end; y++)
 	{
-		int text_y = (int)text_pos & (mlx->text.texture[2]->height - 1);
+		int text_y = (int)text_pos & (g_texture->height - 1);
 		text_pos += step;
-		mlx->img.data[y * WIN_WIDTH + width - 1] = mlx->text.texture[2]->data[text_x + text_y * mlx->text.texture[2]->height];
+		mlx->img.data[y * WIN_WIDTH + width - 1] = g_texture->data[text_x + text_y * g_texture->height];
 	}
 	// draw_flor_and_ground
 	draw_start = draw_end;
 	while (draw_start < WIN_HEIGHT)
 	{
-		mlx->img.data[draw_start * WIN_WIDTH + width - 1] = 0xffffff;
-		mlx->img.data[(WIN_HEIGHT - draw_start - 1) * WIN_WIDTH + width] = 0x3399ff;
+		mlx->img.data[draw_start * WIN_WIDTH + width - 1] = mlx->f_color;
+		mlx->img.data[(WIN_HEIGHT - draw_start - 1) * WIN_WIDTH + width] = mlx->c_color;
 		draw_start++;
 	}
 }
@@ -71,7 +80,7 @@ static void		ft_calcul_step(t_vecteur *vec, t_player *player)
 		}
 }
 
-static void		ft_perform_dda(t_vecteur *vec, t_player *player)
+static void		ft_perform_dda(t_mlx *mlx, t_vecteur *vec, t_player *player)
 {
 	int hit;
 
@@ -80,21 +89,27 @@ static void		ft_perform_dda(t_vecteur *vec, t_player *player)
 	{
     	if (vec->side_dist_x < vec->side_dist_y)
     	{
-          vec->side_dist_x += vec->delta_dist_x;
-          vec->map_x += vec->step_x;
-          vec->side = 0;
-        }
+			vec->side_dist_x += vec->delta_dist_x;
+			vec->map_x += vec->step_x;
+			if (vec->ray_dir_x < 0)
+				vec->side = 0;
+			else
+				vec->side = 1;
+		}
         else
         {
           vec->side_dist_y += vec->delta_dist_y;
           vec->map_y += vec->step_y;
-          vec->side = 1; 
+			if (vec->ray_dir_y < 0)
+				vec->side = 2;
+			else
+				vec->side = 3;
         }
-        if (worldMap[vec->map_x][vec->map_y] > 0) 
+        if (mlx->map.world_map[vec->map_x][vec->map_y] == 1) 
 			hit = 1;
 	}
 	//fising eyes correction
-		if (vec->side == 0) 
+		if (vec->side <= 1) 
 	  		vec->perp_wall_dist = (vec->map_x - player->pos_x + (1 - vec->step_x) / 2) / vec->ray_dir_x;
 		else           
 	  		vec->perp_wall_dist = (vec->map_y - player->pos_y + (1 - vec->step_y) / 2) / vec->ray_dir_y; 
@@ -112,7 +127,7 @@ static void		ft_calcul_wall(t_vecteur *vec, int x, t_mlx *mlx)
 		if (draw_start < 0)
 			draw_start = 0;
 		draw_end = line_height / 2 + WIN_HEIGHT / 2;
-		if (draw_end >= WIN_HEIGHT)
+		if (draw_end >= WIN_HEIGHT || draw_end < 0)
 			draw_end = WIN_HEIGHT - 1;
 	  ft_draw_wall_text(x, draw_start, draw_end, vec->side, mlx);
 }
@@ -127,9 +142,10 @@ void		ft_raycasting(t_mlx *mlx, t_vecteur *vec, t_player *player)
 		ft_calcul_ray_position_direction(vec, x, player);
 		ft_wich_box(vec, player);
 		ft_calcul_step(vec, player);
-		ft_perform_dda(vec, player);
+		ft_perform_dda(mlx, vec, player);
 		ft_calcul_wall(vec, x, mlx);
         mlx->buff[x] = vec->perp_wall_dist;
 	}
-    ft_draw_sprite(mlx, player);
+	if (mlx->count_sprite > 0)
+    	ft_draw_sprite(mlx, player);
 }

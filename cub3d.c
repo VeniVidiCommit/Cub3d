@@ -1,16 +1,5 @@
 #include "cub3d.h"
 
-int worldMap[MAP_WIDTH][MAP_HEIGHT] = { 
-{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-{1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,1},
-{1,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-{1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,1,1,1,1},
-{1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1},
-{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
-
 int	main(int ac, char **argv)
 {
 	t_mlx	mlx;
@@ -22,15 +11,14 @@ int	main(int ac, char **argv)
 		mlx.img.img_ptr = mlx_new_image(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 		mlx.img.data = (int *)mlx_get_data_addr(mlx.img.img_ptr, &mlx.img.bpp, &mlx.img.size_l,
 		&mlx.img.endian);
-		if (ft_load_text(&mlx, &mlx.text) < 0)
+		if (ft_load_text(&mlx.text) < 0)
 			return (-1);
-		if (ft_read_and_split_map(&mlx, argv[1]) < 0)
+		if (ft_read_map(&mlx, argv[1]) < 0)
 			return (-1);
 		ft_raycasting(&mlx, &mlx.vec, &mlx.player);
 		mlx_hook(mlx.win, 2, 1L<<0, key_press, &mlx);
 		mlx_hook(mlx.win,3, 1L<<1, key_release, &mlx);
 		mlx_loop_hook(mlx.mlx_ptr, ft_rotate, &mlx);
-		mlx_put_image_to_window(mlx.mlx_ptr, mlx.win, mlx.img.img_ptr, 0, 0);
 		mlx_loop(mlx.mlx_ptr);
 	}
 	

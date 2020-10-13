@@ -1,7 +1,9 @@
 NAME = cub3d
 
+CC = clang
+
 SRC = cub3d.c init_game.c raycasting.c key_manager.c draw_sprite.c \
-		parse_map.c
+		parse_map.c utils.c
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -14,8 +16,8 @@ $(NAME): $(OBJ)
 		make -j -C libft
 		mv minilibx_opengl/libmlx.a .
 		mv libft/libft.a .
-		gcc $(CFLAGS) -c $(SRC)
-		gcc $(CFLAGS) -L. -lmlx -framework OpenGL -framework Appkit $(OBJ) ./libft.a -o $(NAME)
+		CC $(CFLAGS) -c $(SRC)
+		CC $(CFLAGS) -L. -lmlx -framework OpenGL -framework Appkit $(OBJ) ./libft.a -o $(NAME)
 
 debug: CFLAGS += -g3
 debug: re

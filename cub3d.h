@@ -6,7 +6,7 @@
 /*   By: viroques <viroques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/17 16:13:40 by viroques          #+#    #+#             */
-/*   Updated: 2020/10/07 00:08:33 by viroques         ###   ########.fr       */
+/*   Updated: 2020/10/13 20:46:31 by viroques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <math.h>
-# include "./minilibx_mms/mlx.h"
-# include "./libft/libft.h"
+# include "minilibx_opengl/mlx.h"
+#include "libft/libft.h"
 # include <fcntl.h>
 
 # define WIN_WIDTH 800 
@@ -32,11 +32,6 @@
 # define KEY_W 13
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define NO 0
-# define SO 1
-# define WE 2
-# define EA 3
-# define S 4
 # define H_SIZE 512
 
 typedef struct  s_img
@@ -91,14 +86,15 @@ typedef struct s_sprite
     double  x;
     double  y;
     char    *path;
-    t_img   *texture;
 }               t_sprite;
 
 typedef struct  s_map
 {
-    char        **w_map;
     int         width;
     int         height;
+    int         col;
+    int         line;
+    int         **world_map;
 }               t_map;
 
 typedef struct  s_mlx
@@ -109,11 +105,14 @@ typedef struct  s_mlx
     int         win_height;
     int         screen_width;
     int         screen_height;
+    int         f_color;
+    int         c_color;
     t_img       img;
     t_vecteur   vec;
     t_player    player;
     t_text      text;
-    t_sprite    sprite;
+    t_sprite    *sprite;
+    int         count_sprite;
     t_map       map;
     double  buff[WIN_WIDTH + 1];
     char       keyboard[125];
@@ -124,12 +123,18 @@ extern int worldMap[MAP_WIDTH][MAP_HEIGHT];
 
 void		ft_raycasting(t_mlx *mlx, t_vecteur *vec, t_player *player);
 void		ft_init_vec(t_mlx *mlx);
-int			ft_load_text(t_mlx *mlx, t_text *text);
+int			ft_load_text(t_text *text);
 int		    key_press(int keycode, t_mlx *mlx);
 int		    key_release(int keycode, t_mlx *mlx);
 int			ft_rotate(t_mlx *mlx);
 void		ft_init_vec(t_mlx *mlx);
 void        ft_draw_sprite(t_mlx *mlx, t_player *player);
-int        ft_read_and_split_map(t_mlx *mlx, char *path);
+int        ft_read_map(t_mlx *mlx, char *path);
+int         ft_compt_args(char **tab, int size);
+void        ft_free_tab(char **tab);
+int         ft_str_is_digit(char *str);
+int         ft_hash(char *key);
+int         error(char *msg, int ret);
+int         error_free(char *msg, int ret, char **tab);
 
 #endif

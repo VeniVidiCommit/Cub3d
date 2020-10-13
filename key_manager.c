@@ -14,30 +14,30 @@ int			ft_rotate(t_mlx *mlx)
 {
 	if (mlx->keyboard[KEY_W])
 	{
-		if (worldMap[(int)(mlx->player.pos_x + mlx->player.dir_x * mlx->player.move_speed)][(int)mlx->player.pos_y] == 0)
+		if (mlx->map.world_map[(int)(mlx->player.pos_x + mlx->player.dir_x * mlx->player.move_speed)][(int)mlx->player.pos_y] == 0)
 			mlx->player.pos_x += mlx->player.dir_x * mlx->player.move_speed;
-		if (worldMap[(int)(mlx->player.pos_x)][(int)(mlx->player.pos_y + mlx->player.dir_y * mlx->player.move_speed)] == 0)
+		if (mlx->map.world_map[(int)(mlx->player.pos_x)][(int)(mlx->player.pos_y + mlx->player.dir_y * mlx->player.move_speed)] == 0)
 			mlx->player.pos_y += mlx->player.dir_y * mlx->player.move_speed;
 	}
     if (mlx->keyboard[KEY_S])
     {
-      if (worldMap[(int)(mlx->player.pos_x - mlx->player.dir_x * mlx->player.move_speed)][(int)(mlx->player.pos_y)] == 0) 
+      if (mlx->map.world_map[(int)(mlx->player.pos_x - mlx->player.dir_x * mlx->player.move_speed)][(int)(mlx->player.pos_y)] == 0) 
 	  	mlx->player.pos_x -= mlx->player.dir_x * mlx->player.move_speed;
-      if (worldMap[(int)(mlx->player.pos_x)][(int)(mlx->player.pos_y - mlx->player.dir_y * mlx->player.move_speed)] == 0) 
+      if (mlx->map.world_map[(int)(mlx->player.pos_x)][(int)(mlx->player.pos_y - mlx->player.dir_y * mlx->player.move_speed)] == 0) 
 	  	mlx->player.pos_y -= mlx->player.dir_y * mlx->player.move_speed;
 	}
 	if (mlx->keyboard[KEY_A]) 
 	{
-		if (worldMap[(int)(mlx->player.pos_x - mlx->player.plan_x * mlx->player.move_speed)][(int)mlx->player.pos_y] == 0)
+		if (mlx->map.world_map[(int)(mlx->player.pos_x - mlx->player.plan_x * mlx->player.move_speed)][(int)mlx->player.pos_y] == 0)
 			mlx->player.pos_x -= mlx->player.plan_x * mlx->player.move_speed;
-		if (worldMap[(int)mlx->player.pos_x][(int)(mlx->player.pos_y - mlx->player.plan_y * mlx->player.move_speed)] == 0)
+		if (mlx->map.world_map[(int)mlx->player.pos_x][(int)(mlx->player.pos_y - mlx->player.plan_y * mlx->player.move_speed)] == 0)
 			mlx->player.pos_y -= mlx->player.plan_y * mlx->player.move_speed;
 	}
 	if (mlx->keyboard[KEY_D])
 	{
-		if (worldMap[(int)(mlx->player.pos_x + mlx->player.plan_x * mlx->player.move_speed)][(int)mlx->player.pos_y] == 0)
+		if (mlx->map.world_map[(int)(mlx->player.pos_x + mlx->player.plan_x * mlx->player.move_speed)][(int)mlx->player.pos_y] == 0)
 			mlx->player.pos_x += mlx->player.plan_x * mlx->player.move_speed;
-		if (worldMap[(int)mlx->player.pos_x][(int)(mlx->player.pos_y + mlx->player.plan_y * mlx->player.move_speed)] == 0)
+		if (mlx->map.world_map[(int)mlx->player.pos_x][(int)(mlx->player.pos_y + mlx->player.plan_y * mlx->player.move_speed)] == 0)
 			mlx->player.pos_y += mlx->player.plan_y * mlx->player.move_speed;
 	}
 	if (mlx->keyboard[KEY_RIGHT])
