@@ -6,7 +6,7 @@
 /*   By: viroques <viroques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/17 16:13:40 by viroques          #+#    #+#             */
-/*   Updated: 2020/10/13 20:46:31 by viroques         ###   ########.fr       */
+/*   Updated: 2020/10/14 18:44:47 by viroques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,31 @@ typedef struct  s_mlx
     char       **file;
 }               t_mlx;
 
-extern int worldMap[MAP_WIDTH][MAP_HEIGHT];
+typedef struct s_bmp_header{
+    uint16_t  type;             // Magic identifier: 0x4d42
+    uint32_t  size;             // File size in bytes
+    uint16_t  reserved1;        // Not used
+    uint16_t  reserved2;        // Not used
+    uint32_t  offset;           // Offset to image data in bytes from beginning of file (54 bytes)
+    uint32_t  dib_header_size;  // DIB Header size in bytes (40 bytes)
+    uint32_t   width_px;         // Width of the image
+    uint32_t   height_px;        // Height of image
+    uint16_t  num_planes;       // Number of color planes
+    uint16_t  bits_per_pixel;   // Bits per pixel
+    uint32_t  compression;      // Compression type
+    uint32_t  image_size_bytes; // Image size in bytes
+    uint32_t   x_resolution_ppm; // Pixels per meter
+    uint32_t   y_resolution_ppm; // Pixels per meter
+    uint32_t  num_colors;       // Number of colors  
+    uint32_t  important_colors;
+}               t_bmp_header;
+
+
+typedef struct s_bmp_image{
+    t_bmp_header header;
+    int         *data;
+} t_bmp_image;
+
 
 void		ft_raycasting(t_mlx *mlx, t_vecteur *vec, t_player *player);
 void		ft_init_vec(t_mlx *mlx);
