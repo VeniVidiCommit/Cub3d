@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../include/cub3d.h"
 
 int         ft_compt_args(char **tab, int size)
 {
@@ -52,19 +52,4 @@ int         ft_hash(char *key)
         i++;
     }
     return (hash_value % H_SIZE);
-}
-
-int         error(char *msg, int ret)
-{
-    write(2, "Error\n", 7);
-    write(2, msg, ft_strlen(msg));
-    return (ret);
-}
-
-int         error_free(char *msg, int ret, char **tab)
-{
-    ft_free_tab(tab);
-    write(2, "Error\n", 7);
-    write(2, msg, ft_strlen(msg));
-    return (ret);
 }
