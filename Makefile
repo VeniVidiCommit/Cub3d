@@ -21,6 +21,13 @@ $(NAME): $(OBJ)
 		mv libft/libft.a .
 		CC $(CFLAGS) -I./include -L. -lmlx -framework OpenGL -framework Appkit $(OBJ) ./libft.a -o $(NAME)
 
+mac: $(OBJ)
+		make -j -C minilibx_opengl
+		make -j -C libft
+		mv minilibx_opengl/libmlx.a .
+		mv libft/libft.a .
+		CC $(CFLAGS) -I./include -L. -lmlx -framework OpenGL -framework Appkit $(OBJ) ./libft.a -o $(NAME)
+
 debug: CFLAGS += -g3
 debug: re
 
